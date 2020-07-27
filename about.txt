@@ -1,0 +1,12 @@
+WebSocket
+-> Is a protocol that is used to create real time applications with nodejs.
+-> Can be used with any programming language
+-> used to set up real time communications.
+-> We create a server then multiple clients can connect to that server.
+-> Can be used to achieve what is known as a full duplex communication i.e 
+a bi-directional communication which means that a client can initiate communication with the server and the server can initiate 
+communication with the client.
+-> With web sockets we have a persistent communication which means that the client connects to the server and it stays connected
+for as long as it needs to.
+-> Is a separate protocol for http.
+Socket.io library provides everything we need to work with Web Sockets.
