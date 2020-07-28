@@ -30,6 +30,9 @@ io.on('connection', (socket) => {
     // })
 
     socket.emit('message', message);
+    // send message to everyone that a new user has joined
+    // with broadcast, we can send a message to everyone else except the current client
+    socket.broadcast.emit('clientMessage', 'A new user has joined!');
     socket.on('sendMessage', message => {
         io.emit('clientMessage', message);
     })
