@@ -36,6 +36,11 @@ io.on('connection', (socket) => {
     socket.on('sendMessage', message => {
         io.emit('clientMessage', message);
     })
+
+    // a user disconnects
+    socket.on('disconnect', () => {
+        io.emit('clientMessage', 'a user has left');
+    })
 });
 
 server.listen(port, () => console.log(`Server listening on port ${port}`));
