@@ -15,17 +15,23 @@ app.use(express.static(publicPath));
 const port = process.env.PORT || 3000;
 
 let count = 0;
+let message = "Welcome!";
 
 io.on('connection', (socket) => { 
     console.log('New web socket connection') 
     // sending an event to the client
-    socket.emit('countUpdated', count)
+    // socket.emit('countUpdated', count)
 
-    socket.on('increment', () => {
-        count++;
-        // socket.emit('countUpdated', count)
-        // emitting to every client connection available
-        io.emit('countUpdated', count);
+    // socket.on('increment', () => {
+    //     count++;
+    //     // socket.emit('countUpdated', count)
+    //     // emitting to every client connection available
+    //     io.emit('countUpdated', count);
+    // })
+
+    socket.emit('message', message);
+    socket.on('sendMessage', message => {
+        io.emit('clientMessage', message);
     })
 });
 

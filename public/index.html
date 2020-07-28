@@ -7,18 +7,36 @@
 </head>
 <body>
     <h3>Chat App</h3>
-    <button id="increment">+</button>
+    <!-- <button id="increment">+</button> -->
+    <form id='messageForm'>
+        <input type="text" placeholder="Send message" id="message"/>
+        <button type="submit">Send</button>
+    </form>
     <script src="http://localhost:3000/socket.io/socket.io.js"></script>
     <script>
         const socket = io()
         // receive event server is sending
-        socket.on('countUpdated', (count) => {
-            console.log('The count has been updated', count);
+        // socket.on('countUpdated', (count) => {
+        //     console.log('The count has been updated', count);
+        // })
+
+        // document.querySelector('#increment').addEventListener('click', () => {
+        //     // sending event from client
+        //     socket.emit('increment');
+        // })
+        socket.on('message', message => {
+            console.log(message);
         })
 
-        document.querySelector('#increment').addEventListener('click', () => {
-            // sending event from client
-            socket.emit('increment');
+        document.querySelector('#messageForm').addEventListener('submit', event => {
+            event.preventDefault();
+            const message = document.querySelector('#message').value;
+            // event.target.elements.message.value
+            socket.emit('sendMessage', message);
+        })
+
+        socket.on('clientMessage', chatMessage => {
+            console.log(chatMessage);
         })
     </script>
 </body>
