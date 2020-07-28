@@ -12,6 +12,7 @@
         <input type="text" placeholder="Send message" id="message"/>
         <button type="submit">Send</button>
     </form>
+    <button id="send-location">Send location</button>
     <script src="http://localhost:3000/socket.io/socket.io.js"></script>
     <script>
         const socket = io()
@@ -37,6 +38,19 @@
 
         socket.on('clientMessage', chatMessage => {
             console.log(chatMessage);
+        })
+
+        document.querySelector('#send-location').addEventListener('click', () => {
+            if (!navigator.geolocation) {
+                return alert('Geolocation is not supported by your browser');
+            }
+            navigator.geolocation.getCurrentPosition((position) => {
+                console.log(position);
+                socket.emit('sendLocation', {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude
+                })
+            })
         })
     </script>
 </body>
