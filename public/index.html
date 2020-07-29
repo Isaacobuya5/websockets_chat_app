@@ -16,6 +16,12 @@
     <script src="http://localhost:3000/socket.io/socket.io.js"></script>
     <script>
         const socket = io()
+
+        // Elements
+        const $messageForm = document.querySelector("#messageForm");
+        const $messageFormInput = $messageForm.querySelector('input');
+        const $messageFormButton = $messageForm.querySelector('button');
+        const $locationButton = document.querySelector('#send-location');
         // receive event server is sending
         // socket.on('countUpdated', (count) => {
         //     console.log('The count has been updated', count);
@@ -29,11 +35,18 @@
             console.log(message);
         })
 
-        document.querySelector('#messageForm').addEventListener('submit', event => {
+        $messageForm.addEventListener('submit', event => {
             event.preventDefault();
+
+            $messageFormButton.setAttribute('disabled', 'disabled')
+            // disable the form
             const message = document.querySelector('#message').value;
             // event.target.elements.message.value
             socket.emit('sendMessage', message, (error) => {
+                // re-enable the form
+                $messageFormButton.removeAttribute('disabled');
+                $messageFormInput.value = '';
+                $messageFormInput.focus()
                 if (error) {
                     return console.log(error);
                 }
@@ -45,7 +58,8 @@
             console.log(chatMessage);
         })
 
-        document.querySelector('#send-location').addEventListener('click', () => {
+        $locationButton.addEventListener('click', () => {
+            $locationButton.setAttribute('disabled', 'disabled');
             if (!navigator.geolocation) {
                 return alert('Geolocation is not supported by your browser');
             }
@@ -54,6 +68,9 @@
                 socket.emit('sendLocation', {
                     latitude: position.coords.latitude,
                     longitude: position.coords.longitude
+                },() => {
+                    $locationButton.removeAttribute('disabled')
+                    console.log("Location shared")
                 })
             })
         })
