@@ -3,6 +3,7 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');
+const Filter = require('bad-words');
 
 const app = express();
 const server = http.createServer(app);
@@ -33,8 +34,14 @@ io.on('connection', (socket) => {
     // send message to everyone that a new user has joined
     // with broadcast, we can send a message to everyone else except the current client
     socket.broadcast.emit('clientMessage', 'A new user has joined!');
-    socket.on('sendMessage', message => {
+    socket.on('sendMessage', (message, callback) => {
+
+        const filter = new Filter();
+        if (filter.isProfane(message)) {
+            return callback('Profanity is not allowed');
+        }
         io.emit('clientMessage', message);
+        callback('Delivered')
     })
 
     socket.on('sendLocation', (coords) => {

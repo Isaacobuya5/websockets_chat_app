@@ -33,7 +33,12 @@
             event.preventDefault();
             const message = document.querySelector('#message').value;
             // event.target.elements.message.value
-            socket.emit('sendMessage', message);
+            socket.emit('sendMessage', message, (error) => {
+                if (error) {
+                    return console.log(error);
+                }
+                console.log('The message was delivered!')
+            });
         })
 
         socket.on('clientMessage', chatMessage => {
