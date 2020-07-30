@@ -39,12 +39,34 @@ const removeUser = (id) => {
     }
 }
 
+const getUser = (id) => {
+    return users.find(user => user.id === id);
+}
+
+const getUsersInRoom = (room) => {
+    return users.filter(user => user.room === room);
+}
+
     addUser({
         id: 22,
         username: 'isaac',
         room: 'sports'
     })
 
-    const removedUser = removeUser(22);
-    console.log(removedUser);
-    console.log(users);
+    addUser({
+        id: 25,
+        username: 'mike',
+        room: 'sports'
+    })
+
+    addUser({
+        id: 22,
+        username: 'tom',
+        room: 'java'
+    })
+
+    const user = getUser(29)
+    console.log(user);
+    const usersInRoom = getUsersInRoom('python');
+    console.log(usersInRoom);
+
