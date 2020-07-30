@@ -24,7 +24,7 @@
 
     <script id="location-message-template" type="text/html">
         <div>
-            <p><a href={{url}} target="_blank">My current location</p>
+            <p>{{createdAt}} - <a href={{url}} target="_blank">My current location</p>
         </div>
     </script>
 
@@ -120,9 +120,10 @@ socket.on('message', (message) => {
     $messages.insertAdjacentHTML('beforeend', html)
 })
 
-socket.on('locationMessage', url => {
+socket.on('locationMessage', (message) => {
     const html = Mustache.render(locationMessageTemplate, {
-        url
+        url: message.url,
+        createdAt: moment(message.createdAt).format('h:m a')
     })
     $messages.insertAdjacentHTML('beforeend', html);
 });
