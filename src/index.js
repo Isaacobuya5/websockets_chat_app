@@ -18,41 +18,68 @@ const port = process.env.PORT || 3000;
 let count = 0;
 let message = "Welcome!";
 
-io.on('connection', (socket) => { 
-    console.log('New web socket connection') 
-    // sending an event to the client
-    // socket.emit('countUpdated', count)
+// io.on('connection', (socket) => { 
+//     console.log('New web socket connection') 
+//     // sending an event to the client
+//     // socket.emit('countUpdated', count)
 
-    // socket.on('increment', () => {
-    //     count++;
-    //     // socket.emit('countUpdated', count)
-    //     // emitting to every client connection available
-    //     io.emit('countUpdated', count);
-    // })
+//     // socket.on('increment', () => {
+//     //     count++;
+//     //     // socket.emit('countUpdated', count)
+//     //     // emitting to every client connection available
+//     //     io.emit('countUpdated', count);
+//     // })
 
-    socket.emit('message', message);
-    // send message to everyone that a new user has joined
-    // with broadcast, we can send a message to everyone else except the current client
-    socket.broadcast.emit('clientMessage', 'A new user has joined!');
+//     socket.emit('message', message);
+//     // send message to everyone that a new user has joined
+//     // with broadcast, we can send a message to everyone else except the current client
+//     socket.broadcast.emit('clientMessage', 'A new user has joined!');
+//     socket.on('sendMessage', (message, callback) => {
+
+//         const filter = new Filter();
+//         if (filter.isProfane(message)) {
+//             return callback('Profanity is not allowed');
+//         }
+//         io.emit('clientMessage', message);
+//         callback('Delivered')
+//     })
+
+//     socket.on('sendLocation', (coords, callback) => {
+//         io.emit('clientMessage', `https://google.com/maps?q=${coords.latitude},${coords.longitude}`)
+//         callback();
+//     })
+
+//     // a user disconnects
+//     socket.on('disconnect', () => {
+//         io.emit('clientMessage', 'a user has left');
+//     })
+// });
+
+io.on('connection', (socket) => {
+    console.log('New WebSocket connection')
+
+    socket.emit('message', 'Welcome!')
+    socket.broadcast.emit('message', 'A new user has joined!')
+
     socket.on('sendMessage', (message, callback) => {
+        const filter = new Filter()
 
-        const filter = new Filter();
         if (filter.isProfane(message)) {
-            return callback('Profanity is not allowed');
+            return callback('Profanity is not allowed!')
         }
-        io.emit('clientMessage', message);
-        callback('Delivered')
+
+        io.emit('message', message)
+        callback()
     })
 
     socket.on('sendLocation', (coords, callback) => {
-        io.emit('clientMessage', `https://google.com/maps?q=${coords.latitude},${coords.longitude}`)
-        callback();
+        io.emit('message', `https://google.com/maps?q=${coords.latitude},${coords.longitude}`)
+        callback()
     })
 
-    // a user disconnects
     socket.on('disconnect', () => {
-        io.emit('clientMessage', 'a user has left');
+        io.emit('message', 'A user has left!')
     })
-});
+})
 
 server.listen(port, () => console.log(`Server listening on port ${port}`));
